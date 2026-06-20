@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - neon_gate_network
+    depends_on:
+      - postgres
+    volumes:
+      - ./src:/app
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: neon_gate
+    ports:
+      - 5432:5432
+    networks:
+      - neon_gate_network
+    volumes:
+      - neon_gate_data:/var/lib/postgresql/data
+volumes:
+  neon_gate_data:
+    driver: local
+
+networks:
+  neon_gate_network:
+    driver: bridge
